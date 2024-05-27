@@ -38,6 +38,8 @@ private final IRoomService roomService;
     public List<String> getRoomTypes() {
         return roomService.getAllRoomTypes();
     }
+
+
     @GetMapping("/all-rooms")
     public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException {
         List<Room> rooms = roomService.getAllRooms();
