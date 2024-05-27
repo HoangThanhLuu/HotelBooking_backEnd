@@ -1,7 +1,10 @@
 package com.vn.htl.back_end.controller;
 
+import com.vn.htl.back_end.model.BookedRoom;
 import com.vn.htl.back_end.model.Room;
+import com.vn.htl.back_end.response.BookingResponse;
 import com.vn.htl.back_end.response.RoomResponse;
+import com.vn.htl.back_end.service.BookingService;
 import com.vn.htl.back_end.service.IRoomService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -21,8 +24,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class RoomController {
-private final IRoomService roomService;
-
+    private final IRoomService roomService;
+    private final BookingService bookingService;
     @PostMapping("/add/new-room")
 
     public ResponseEntity<RoomResponse> addNewRoom(
@@ -54,6 +57,30 @@ private final IRoomService roomService;
             }
         }
         return ResponseEntity.ok(roomResponses);
+    }
+
+    private RoomResponse getRoomResponse(Room room) {
+        List<BookedRoom> bookings = getAllBookingsByRoomId(room.getId());
+        List<BookingResponse> bookingInfo = bookings
+                .stream()
+                .map(booking -> new BookingResponse(booking.getBookingId(),
+                        booking.getCheckInDate(),
+                        booking.getCheckOutDate(), booking.getBookingConfirmationCode())).toList();
+        byte[] photoBytes = null;
+        Blob photoBlob = room.getPhoto();
+        if (photoBlob != null) {
+            try {
+                photoBytes = photoBlob.getBytes(1, (int) photoBlob.length());
+            } catch (SQLException e) {
+                throw new PhotoRetrievalException("Error retrieving photo");
+            }
+        }
+        return new RoomResponse(room.getId(),
+                room.getRoomType(), room.getRoomPrice(),
+                room.isBooked(), photoBytes, bookingInfo);
+    }
+
+    private List<BookedRoom> getAllBookingsByRoomId(Long id) {
     }
 
 
