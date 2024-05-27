@@ -1,5 +1,6 @@
 package com.vn.htl.back_end.controller;
 
+import com.vn.htl.back_end.exception.PhotoRetrievalException;
 import com.vn.htl.back_end.model.BookedRoom;
 import com.vn.htl.back_end.model.Room;
 import com.vn.htl.back_end.response.BookingResponse;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -80,7 +82,9 @@ public class RoomController {
                 room.isBooked(), photoBytes, bookingInfo);
     }
 
-    private List<BookedRoom> getAllBookingsByRoomId(Long id) {
+    private List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
+        return bookingService.getAllBookingsByRoomId(roomId);
+
     }
 
 
