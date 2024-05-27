@@ -4,6 +4,8 @@ import com.vn.htl.back_end.model.Room;
 import com.vn.htl.back_end.response.RoomResponse;
 import com.vn.htl.back_end.service.IRoomService;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/rooms")
@@ -33,6 +37,21 @@ private final IRoomService roomService;
     @GetMapping("/room/types")
     public List<String> getRoomTypes() {
         return roomService.getAllRoomTypes();
+    }
+    @GetMapping("/all-rooms")
+    public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException {
+        List<Room> rooms = roomService.getAllRooms();
+        List<RoomResponse> roomResponses = new ArrayList<>();
+        for (Room room : rooms) {
+            byte[] photoBytes = roomService.getRoomPhotoByRoomId(room.getId());
+            if (photoBytes != null && photoBytes.length > 0) {
+                String base64Photo = Base64.encodeBase64String(photoBytes);
+                RoomResponse roomResponse = getRoomResponse(room);
+                roomResponse.setPhoto(base64Photo);
+                roomResponses.add(roomResponse);
+            }
+        }
+        return ResponseEntity.ok(roomResponses);
     }
 
 

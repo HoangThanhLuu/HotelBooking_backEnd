@@ -41,4 +41,9 @@ public class RoomService implements IRoomService {
     public List<String> getAllRoomTypes() {
         return roomRepository.findDistinctRoomTypes();
     }
+
+    @Override
+    public byte[] getRoomPhotoByRoomId(Long roomId) {
+        return new byte[0];
+    }
 }
