@@ -1,6 +1,7 @@
 package com.vn.htl.back_end.controller;
 
 import com.vn.htl.back_end.exception.PhotoRetrievalException;
+import com.vn.htl.back_end.exception.ResourceNotFoundException;
 import com.vn.htl.back_end.model.BookedRoom;
 import com.vn.htl.back_end.model.Room;
 import com.vn.htl.back_end.response.BookingResponse;
