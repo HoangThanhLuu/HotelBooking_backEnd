@@ -1,5 +1,6 @@
 package com.vn.htl.back_end.service;
 
+import com.vn.htl.back_end.exception.InternalServerException;
 import com.vn.htl.back_end.exception.ResourceNotFoundException;
 import com.vn.htl.back_end.model.Room;
 import com.vn.htl.back_end.repository.RoomRepository;
@@ -67,4 +68,18 @@ public class RoomService implements IRoomService {
         }
     }
 
+    @Override
+    public Room updateRoom(Long roomId, String roomType, BigDecimal roomPrice, byte[] photoBytes) {
+        Room room = roomRepository.findById(roomId).get();
+        if (roomType != null) room.setRoomType(roomType);
+        if (roomPrice != null) room.setRoomPrice(roomPrice);
+        if (photoBytes != null && photoBytes.length > 0) {
+            try {
+                room.setPhoto(new SerialBlob(photoBytes));
+            } catch (SQLException ex) {
+                throw new InternalServerException("Fail updating room");
+            }
+        }
+        return roomRepository.save(room);
+    }
 }
