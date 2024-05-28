@@ -1,6 +1,11 @@
 package com.vn.htl.back_end.exception;
 
-public class InternalServerException extends Throwable {
-    public InternalServerException(String failUpdatingRoom) {
+/**
+ * @author Simpson Alfred
+ */
+
+public class InternalServerException extends RuntimeException {
+    public InternalServerException(String message) {
+        super(message);
     }
 }
