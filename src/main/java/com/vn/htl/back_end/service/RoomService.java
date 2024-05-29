@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,12 +34,6 @@ public class RoomService implements IRoomService {
             room.setPhoto(photoBlob);
         }
         return roomRepository.save(room);
-
-    }
-
-    @Override
-    public List<Room> getAllRooms() {
-        return null;
     }
 
     @Override
@@ -46,6 +41,10 @@ public class RoomService implements IRoomService {
         return roomRepository.findDistinctRoomTypes();
     }
 
+    @Override
+    public List<Room> getAllRooms() {
+        return roomRepository.findAll();
+    }
 
     @Override
     public byte[] getRoomPhotoByRoomId(Long roomId) throws SQLException {
@@ -88,5 +87,8 @@ public class RoomService implements IRoomService {
         return Optional.of(roomRepository.findById(roomId).get());
     }
 
-
+    @Override
+    public List<Room> getAvailableRooms(LocalDate checkInDate, LocalDate checkOutDate, String roomType) {
+        return roomRepository.findAvailableRoomsByDatesAndType(checkInDate, checkOutDate, roomType);
+    }
 }
