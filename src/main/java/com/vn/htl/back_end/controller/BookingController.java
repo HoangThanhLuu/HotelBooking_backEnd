@@ -8,10 +8,7 @@ import com.vn.htl.back_end.service.IBookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +30,18 @@ public class BookingController {
         return ResponseEntity.ok(bookingResponses);
     }
 
+    @PostMapping("/room/{roomId}/booking")
+    public ResponseEntity<?> saveBooking(@PathVariable Long roomId,
+                                         @RequestBody BookedRoom bookingRequest){
+        try{
+            String confirmationCode = bookingService.saveBooking(roomId, bookingRequest);
+            return ResponseEntity.ok(
+                    "Room booked successfully, Your booking confirmation code is :"+confirmationCode);
+
+        }catch (InvalidBookingRequestException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
     @GetMapping("/confirmation/{confirmationCode}")
     public ResponseEntity<?> getBookingByConfirmationCode(@PathVariable String confirmationCode){
         try{
