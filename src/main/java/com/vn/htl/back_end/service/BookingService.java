@@ -1,15 +1,20 @@
 package com.vn.htl.back_end.service;
 
 import com.vn.htl.back_end.model.BookedRoom;
+import com.vn.htl.back_end.repository.BookingRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class BookingService implements IBookingService {
+    private final BookingRepository bookingRepository;
+    private final IRoomService roomService;
     @Override
     public void cancelBooking(Long bookingId) {
-        
+        return bookingRepository.findAll();
     }
 
     public List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
