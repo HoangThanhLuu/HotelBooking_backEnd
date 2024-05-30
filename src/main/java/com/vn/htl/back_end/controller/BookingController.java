@@ -53,5 +53,10 @@ public class BookingController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
+    @DeleteMapping("/booking/{bookingId}/delete")
+    public void cancelBooking(@PathVariable Long bookingId){
+        bookingService.cancelBooking(bookingId);
+    }
+
 
 }
