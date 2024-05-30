@@ -18,8 +18,9 @@ public class BookingService implements IBookingService {
         bookingRepository.deleteById(bookingId);
     }
 
+    @Override
     public List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
-        return null;
+        return bookingRepository.findByRoomId(roomId);
     }
 
     @Override
