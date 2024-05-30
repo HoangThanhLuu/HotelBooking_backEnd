@@ -14,7 +14,7 @@ public class BookingService implements IBookingService {
     private final IRoomService roomService;
     @Override
     public void cancelBooking(Long bookingId) {
-        return bookingRepository.findAll();
+        bookingRepository.deleteById(bookingId);
     }
 
     public List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
