@@ -4,8 +4,11 @@ package com.vn.htl.back_end.controller;
 import com.vn.htl.back_end.exception.InvalidBookingRequestException;
 import com.vn.htl.back_end.exception.ResourceNotFoundException;
 import com.vn.htl.back_end.model.BookedRoom;
+import com.vn.htl.back_end.model.Room;
 import com.vn.htl.back_end.response.BookingResponse;
+import com.vn.htl.back_end.response.RoomResponse;
 import com.vn.htl.back_end.service.IBookingService;
+import com.vn.htl.back_end.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,7 @@ import java.util.List;
 @RequestMapping("/bookings")
 public class BookingController {
     private final IBookingService bookingService;
+    private final RoomService roomService;
 
     @GetMapping("/all-bookings")
     public ResponseEntity<List<BookingResponse>> getAllBookings(){
@@ -57,6 +61,18 @@ public class BookingController {
     public void cancelBooking(@PathVariable Long bookingId){
         bookingService.cancelBooking(bookingId);
     }
-
+    private BookingResponse getBookingResponse(BookedRoom booking) {
+        Room theRoom = roomService.getRoomById(booking.getRoom().getId()).get();
+        RoomResponse room = new RoomResponse(
+                theRoom.getId(),
+                theRoom.getRoomType(),
+                theRoom.getRoomPrice());
+        return new BookingResponse(
+                booking.getBookingId(), booking.getCheckInDate(),
+                booking.getCheckOutDate(),booking.getGuestFullName(),
+                booking.getGuestEmail(), booking.getNumOfAdults(),
+                booking.getNumOfChildren(), booking.getTotalNumOfGuest(),
+                booking.getBookingConfirmationCode(), room);
+    }
 
 }
