@@ -1,12 +1,15 @@
 package com.vn.htl.back_end.controller;
 
 
+import com.vn.htl.back_end.exception.ResourceNotFoundException;
 import com.vn.htl.back_end.model.BookedRoom;
 import com.vn.htl.back_end.response.BookingResponse;
 import com.vn.htl.back_end.service.IBookingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +33,15 @@ public class BookingController {
         return ResponseEntity.ok(bookingResponses);
     }
 
-
+    @GetMapping("/confirmation/{confirmationCode}")
+    public ResponseEntity<?> getBookingByConfirmationCode(@PathVariable String confirmationCode){
+        try{
+            BookedRoom booking = bookingService.findByBookingConfirmationCode(confirmationCode);
+            BookingResponse bookingResponse = getBookingResponse(booking);
+            return ResponseEntity.ok(bookingResponse);
+        }catch (ResourceNotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
 
 }
