@@ -16,6 +16,18 @@ public class BookingService implements IBookingService {
     private final BookingRepository bookingRepository;
     private final IRoomService roomService;
 
+
+    @Override
+    public List<BookedRoom> getAllBookings() {
+        return bookingRepository.findAll();
+    }
+
+
+    @Override
+    public List<BookedRoom> getBookingsByUserEmail(String email) {
+        return bookingRepository.findByGuestEmail(email);
+    }
+
     @Override
     public void cancelBooking(Long bookingId) {
         bookingRepository.deleteById(bookingId);
@@ -43,6 +55,14 @@ public class BookingService implements IBookingService {
         return bookingRequest.getBookingConfirmationCode();
     }
 
+    @Override
+    public BookedRoom findByBookingConfirmationCode(String confirmationCode) {
+        return bookingRepository.findByBookingConfirmationCode(confirmationCode)
+                .orElseThrow(() -> new ResourceNotFoundException("No booking found with booking code :"+confirmationCode));
+
+    }
+
+
     private boolean roomIsAvailable(BookedRoom bookingRequest, List<BookedRoom> existingBookings) {
         return existingBookings.stream()
                 .noneMatch(existingBooking ->
@@ -65,21 +85,7 @@ public class BookingService implements IBookingService {
                 );
     }
 
-    @Override
-    public BookedRoom findByBookingConfirmationCode(String confirmationCode) {
-        return bookingRepository.findByBookingConfirmationCode(confirmationCode)
-                .orElseThrow(() -> new ResourceNotFoundException("No booking found with booking code :"+confirmationCode));
 
-    }
 
-    @Override
-    public List<BookedRoom> getAllBookings() {
-        return bookingRepository.findAll();
-    }
-
-    @Override
-    public List<BookedRoom> getBookingsByUserEmail(String email) {
-        return bookingRepository.findByGuestEmail(email);
-    }
 
 }
