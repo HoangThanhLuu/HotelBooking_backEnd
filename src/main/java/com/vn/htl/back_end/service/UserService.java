@@ -1,8 +1,10 @@
 package com.vn.htl.back_end.service;
 
 import com.vn.htl.back_end.model.User;
+import com.vn.htl.back_end.repository.RoleRepository;
 import com.vn.htl.back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService implements IUserService{
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
     @Override
     public User registerUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())){
