@@ -12,6 +12,7 @@ import java.util.List;
 public class BookingService implements IBookingService {
     private final BookingRepository bookingRepository;
     private final IRoomService roomService;
+
     @Override
     public void cancelBooking(Long bookingId) {
         bookingRepository.deleteById(bookingId);
@@ -33,7 +34,7 @@ public class BookingService implements IBookingService {
 
     @Override
     public List<BookedRoom> getAllBookings() {
-        return List.of();
+        return bookingRepository.findAll();
     }
 
     @Override
