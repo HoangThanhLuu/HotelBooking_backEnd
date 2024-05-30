@@ -1,5 +1,6 @@
 package com.vn.htl.back_end.service;
 
+import com.vn.htl.back_end.exception.UserAlreadyExistsException;
 import com.vn.htl.back_end.model.Role;
 import com.vn.htl.back_end.model.User;
 import com.vn.htl.back_end.repository.RoleRepository;
