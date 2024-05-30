@@ -2,6 +2,7 @@ package com.vn.htl.back_end.controller;
 
 import com.vn.htl.back_end.exception.RoleAlreadyExistException;
 import com.vn.htl.back_end.model.Role;
+import com.vn.htl.back_end.model.User;
 import com.vn.htl.back_end.service.IRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,8 +36,10 @@ public class RoleController {
     public void deleteRole(@PathVariable("roleId") Long roleId){
         roleService.deleteRole(roleId);
     }
-    @PostMapping("/remove-all-users-from-role/{roleId}")
-    public Role removeAllUsersFromRole(@PathVariable("roleId") Long roleId){
-        return roleService.removeAllUsersFromRole(roleId);
+    @PostMapping("/assign-user-to-role")
+    public User assignUserToRole(
+            @RequestParam("userId") Long userId,
+            @RequestParam("roleId") Long roleId){
+        return roleService.assignRoleToUser(userId, roleId);
     }
 }
