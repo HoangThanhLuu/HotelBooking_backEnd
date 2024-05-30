@@ -1,13 +1,26 @@
 package com.vn.htl.back_end.service;
 
 import com.vn.htl.back_end.model.User;
+import com.vn.htl.back_end.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class UserService implements IUserService{
+    private final UserRepository userRepository;
     @Override
     public User registerUser(User user) {
-        return null;
+        if (userRepository.existsByEmail(user.getEmail())){
+            throw new UserAlreadyExistsException(user.getEmail() + " already exists");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        System.out.println(user.getPassword());
+        Role userRole = roleRepository.findByName("ROLE_USER").get();
+        user.setRoles(Collections.singletonList(userRole));
+        return userRepository.save(user);
     }
 
     @Override
